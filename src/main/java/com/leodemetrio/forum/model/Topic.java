@@ -1,7 +1,9 @@
 package com.leodemetrio.forum.model;
 
 
+import com.leodemetrio.forum.dto.TopicRequestDto;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @Data
 @Entity
+@RequiredArgsConstructor
 public class Topic {
 
     @Id
@@ -33,11 +36,20 @@ public class Topic {
     @OneToMany(mappedBy = "topic")
     private List<Answer> answers = new ArrayList<>();
 
-    public Topic(){}
 
-    public Topic(String title, String message, Course course) {
+    public Topic(String title, String message, Course course){
         this.title = title;
         this.message = message;
+        this.course = course;
+    }
+
+    public Topic(Long id, String title, String message, LocalDateTime dataCreation, StatusTopic status, User author, Course course) {
+        this.id = id;
+        this.title = title;
+        this.message = message;
+        this.dataCreation = dataCreation;
+        this.status = status;
+        this.author = author;
         this.course = course;
     }
 }

@@ -1,4 +1,4 @@
-package com.leodemetrio.forum;
+package com.leodemetrio.forum.dto;
 
 import com.leodemetrio.forum.model.Topic;
 

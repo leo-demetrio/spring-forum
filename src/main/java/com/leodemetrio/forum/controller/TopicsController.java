@@ -13,6 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/topics")
@@ -41,5 +42,11 @@ public class TopicsController {
         Topic topic = topicPostDto.convertToTopic(courseRepository);
         URI uri = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
         return ResponseEntity.created(uri).body(new TopicDto(topicRepository.save(topic)));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TopicDto> findById(@PathVariable Long id){
+        Optional<Topic> OptionalTopic = topicRepository.findById(id);
+        return ResponseEntity.ok(new TopicDto(OptionalTopic.get()));
     }
 }

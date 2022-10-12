@@ -2,7 +2,8 @@ package com.leodemetrio.forum.controller;
 
 import com.leodemetrio.forum.dto.TopicDetailsDto;
 import com.leodemetrio.forum.dto.TopicDto;
-import com.leodemetrio.forum.dto.TopicRequestDto;
+import com.leodemetrio.forum.dto.TopicRequestPostDto;
+import com.leodemetrio.forum.dto.TopicRequestPutDto;
 import com.leodemetrio.forum.model.Topic;
 import com.leodemetrio.forum.repository.CourseRepository;
 import com.leodemetrio.forum.repository.TopicRepository;
@@ -39,7 +40,7 @@ public class TopicsController {
     }
 
     @PostMapping
-    public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequestDto topicPostDto, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequestPostDto topicPostDto, UriComponentsBuilder uriComponentsBuilder){
         Topic topic = topicPostDto.convertToTopic(courseRepository);
         URI uri = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
         return ResponseEntity.created(uri).body(new TopicDto(topicRepository.save(topic)));
@@ -49,5 +50,12 @@ public class TopicsController {
     public ResponseEntity<TopicDetailsDto> findById(@PathVariable Long id){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
         return ResponseEntity.ok(new TopicDetailsDto(OptionalTopic.get()));
+    }
+
+    @PutMapping("/{id}")
+    public  ResponseEntity<TopicDto> update(@PathVariable Long id, @RequestBody TopicRequestPutDto topicDto){
+        Topic topic = topicDto.update(id, topicRepository);
+
+        return ResponseEntity.ok(new TopicDto(topic));
     }
 }

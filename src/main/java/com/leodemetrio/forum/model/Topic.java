@@ -1,7 +1,6 @@
 package com.leodemetrio.forum.model;
 
 
-import com.leodemetrio.forum.dto.TopicRequestDto;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 

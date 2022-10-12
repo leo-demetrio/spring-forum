@@ -3,16 +3,18 @@ package com.leodemetrio.forum.dto;
 import com.leodemetrio.forum.model.Course;
 import com.leodemetrio.forum.model.Topic;
 import com.leodemetrio.forum.repository.CourseRepository;
+import com.leodemetrio.forum.repository.TopicRepository;
 import org.hibernate.validator.constraints.Length;
 
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
-public class TopicRequestDto {
+public class TopicRequestPostDto {
 
     @NotNull
     @NotEmpty
@@ -29,16 +31,16 @@ public class TopicRequestDto {
     @Length(min = 5)
     private String nameCourse;
 
-    public TopicRequestDto(){}
+    public TopicRequestPostDto(){}
 
-    public TopicRequestDto(Topic topic){
+    public TopicRequestPostDto(Topic topic){
         this.title = topic.getTitle();
         this.message = topic.getMessage();
         this.nameCourse = topic.getCourse().getName();
 
     }
-    public static List<TopicRequestDto> convert(List<Topic> topic){
-        return topic.stream().map(TopicRequestDto::new).collect(Collectors.toList());
+    public static List<TopicRequestPostDto> convert(List<Topic> topic){
+        return topic.stream().map(TopicRequestPostDto::new).collect(Collectors.toList());
     }
     public Topic convertToTopic(CourseRepository courseRepository) {
         Course course = courseRepository.findByName(nameCourse);
@@ -56,6 +58,5 @@ public class TopicRequestDto {
     public String getNameCourse() {
         return nameCourse;
     }
-
 
 }

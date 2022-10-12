@@ -47,8 +47,7 @@ public class TopicRequestPutDto {
         return message;
     }
 
-    public Topic update(Long id, TopicRepository topicRepository) {
-        Topic topic = topicRepository.findById(id).get();
+    public Topic update(Topic topic) {
         topic.setTitle(this.title);
         topic.setMessage(this.message);
 

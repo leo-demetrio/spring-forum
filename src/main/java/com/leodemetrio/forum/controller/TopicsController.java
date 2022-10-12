@@ -50,19 +50,25 @@ public class TopicsController {
     @GetMapping("/{id}")
     public ResponseEntity<TopicDetailsDto> findById(@PathVariable Long id){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
+        if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();
+
         return ResponseEntity.ok(new TopicDetailsDto(OptionalTopic.get()));
     }
 
     @PutMapping("/{id}")
     @Transactional
     public  ResponseEntity<TopicDto> update(@PathVariable Long id, @RequestBody TopicRequestPutDto topicDto){
-        Topic topic = topicDto.update(id, topicRepository);
+        Optional<Topic> OptionalTopic = topicRepository.findById(id);
+        if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();
+        Topic topic = topicDto.update(OptionalTopic.get());
 
         return ResponseEntity.ok(new TopicDto(topic));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){
+        Optional<Topic> OptionalTopic = topicRepository.findById(id);
+        if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();
         topicRepository.deleteById(id);
 
         return ResponseEntity.ok().build();

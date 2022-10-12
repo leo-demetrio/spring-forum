@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
@@ -53,9 +54,17 @@ public class TopicsController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public  ResponseEntity<TopicDto> update(@PathVariable Long id, @RequestBody TopicRequestPutDto topicDto){
         Topic topic = topicDto.update(id, topicRepository);
 
         return ResponseEntity.ok(new TopicDto(topic));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        topicRepository.deleteById(id);
+
+        return ResponseEntity.ok().build();
     }
 }

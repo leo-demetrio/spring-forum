@@ -1,5 +1,6 @@
 package com.leodemetrio.forum.controller;
 
+import com.leodemetrio.forum.dto.TopicDetailsDto;
 import com.leodemetrio.forum.dto.TopicDto;
 import com.leodemetrio.forum.dto.TopicRequestDto;
 import com.leodemetrio.forum.model.Topic;
@@ -45,8 +46,8 @@ public class TopicsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TopicDto> findById(@PathVariable Long id){
+    public ResponseEntity<TopicDetailsDto> findById(@PathVariable Long id){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
-        return ResponseEntity.ok(new TopicDto(OptionalTopic.get()));
+        return ResponseEntity.ok(new TopicDetailsDto(OptionalTopic.get()));
     }
 }

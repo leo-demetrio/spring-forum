@@ -8,6 +8,8 @@ import com.leodemetrio.forum.model.Topic;
 import com.leodemetrio.forum.repository.CourseRepository;
 import com.leodemetrio.forum.repository.TopicRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -37,6 +39,7 @@ public class TopicsController {
     }
 
     @GetMapping
+    @Cacheable(value = "listTopics")
     public Page<TopicDto> listAll(
             @RequestParam(value = "CourseName", required = false) String courseName,
             Pageable pageable
@@ -48,6 +51,7 @@ public class TopicsController {
     }
 
     @PostMapping
+    @CacheEvict(value = "listTopics", allEntries = true)
     public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequestPostDto topicPostDto, UriComponentsBuilder uriComponentsBuilder){
         Topic topic = topicPostDto.convertToTopic(courseRepository);
         URI uri = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
@@ -64,6 +68,7 @@ public class TopicsController {
 
     @PutMapping("/{id}")
     @Transactional
+    @CacheEvict(value = "listTopics", allEntries = true)
     public  ResponseEntity<TopicDto> update(@PathVariable Long id, @RequestBody TopicRequestPutDto topicDto){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
         if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();
@@ -73,6 +78,7 @@ public class TopicsController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "listTopics", allEntries = true)
     public ResponseEntity<Void> delete(@PathVariable Long id){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
         if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();

@@ -8,6 +8,9 @@ import com.leodemetrio.forum.model.Topic;
 import com.leodemetrio.forum.repository.CourseRepository;
 import com.leodemetrio.forum.repository.TopicRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -33,11 +36,16 @@ public class TopicsController {
     }
 
     @GetMapping
-    public List<TopicDto> listAll(@RequestParam(value = "CourseName", required = false) String courseName){
+    public Page<TopicDto> listAll(
+            @RequestParam(value = "CourseName", required = false) String courseName,
+            @RequestParam int pag,
+            @RequestParam int qtt
+    ){
+        Pageable pageable = PageRequest.of(pag,qtt);
         if(courseName == null){
-            return TopicDto.convert(topicRepository.findAll());
+            return TopicDto.convert(topicRepository.findAll(pageable));
         }
-        return TopicDto.convert(topicRepository.findByCourseName(courseName));
+        return TopicDto.convert(topicRepository.findByCourseName(courseName, pageable));
     }
 
     @PostMapping

@@ -1,6 +1,7 @@
 package com.leodemetrio.forum.dto;
 
 import com.leodemetrio.forum.model.Topic;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,8 +21,8 @@ public class TopicDto {
         this.message = topic.getMessage();
         this.dataCreation = topic.getDataCreation();
     }
-    public static List<TopicDto> convert(List<Topic> topic){
-        return topic.stream().map(TopicDto::new).collect(Collectors.toList());
+    public static Page<TopicDto> convert(Page<Topic> topics){
+        return topics.map(TopicDto::new);
     }
 
     public Long getId() {

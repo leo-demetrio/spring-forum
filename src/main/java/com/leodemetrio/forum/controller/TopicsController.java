@@ -39,11 +39,8 @@ public class TopicsController {
     @GetMapping
     public Page<TopicDto> listAll(
             @RequestParam(value = "CourseName", required = false) String courseName,
-            @RequestParam int pag,
-            @RequestParam int qtt,
-            @RequestParam String ordinate
+            Pageable pageable
     ){
-        Pageable pageable = PageRequest.of(pag,qtt, Sort.Direction.ASC, ordinate);
         if(courseName == null){
             return TopicDto.convert(topicRepository.findAll(pageable));
         }

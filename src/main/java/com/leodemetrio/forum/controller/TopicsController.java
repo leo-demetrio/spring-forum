@@ -11,6 +11,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -39,9 +40,10 @@ public class TopicsController {
     public Page<TopicDto> listAll(
             @RequestParam(value = "CourseName", required = false) String courseName,
             @RequestParam int pag,
-            @RequestParam int qtt
+            @RequestParam int qtt,
+            @RequestParam String ordinate
     ){
-        Pageable pageable = PageRequest.of(pag,qtt);
+        Pageable pageable = PageRequest.of(pag,qtt, Sort.Direction.ASC, ordinate);
         if(courseName == null){
             return TopicDto.convert(topicRepository.findAll(pageable));
         }

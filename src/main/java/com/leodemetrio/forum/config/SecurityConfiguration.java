@@ -7,14 +7,22 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    private final AuthenticateService authenticateService;
+
+    public SecurityConfiguration(AuthenticateService authenticateService) {
+        this.authenticateService = authenticateService;
+    }
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-       // super.configure(auth);
+
+        auth.userDetailsService(authenticateService).passwordEncoder(new BCryptPasswordEncoder());
+
     }
 
     @Override

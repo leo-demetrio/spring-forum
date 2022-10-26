@@ -7,16 +7,15 @@ import com.leodemetrio.forum.model.User;
 import com.leodemetrio.forum.repository.CourseRepository;
 import com.leodemetrio.forum.repository.TopicRepository;
 import com.leodemetrio.forum.repository.UserRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Configuration("test")
-//@AllArgsConstructor
 @RequiredArgsConstructor
 public class TestConfig implements CommandLineRunner {
 
@@ -32,9 +31,10 @@ public class TestConfig implements CommandLineRunner {
 //    }
 
     public void run(String... args) throws Exception{
+        var password = new BCryptPasswordEncoder().encode("123");
 
-        var a = new User(null,"Leo","leo@gmail.com","123");
-        var a1 = new User(null,"Levi","levi@gmail.com","123");
+        var a = new User(null,"Leo","leo@gmail.com",password);
+        var a1 = new User(null,"Levi","levi@gmail.com",password);
 
         var c = new Course(null,"Spring","Programing");
         var c1 = new Course(null,"Spring Boot", "Programing");

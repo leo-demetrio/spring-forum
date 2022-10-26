@@ -42,6 +42,7 @@ public class TopicsController {
     }
 
     @GetMapping
+    @Cacheable(value = "listTopics")
     public Page<TopicDto> listAll(
             @RequestParam(value = "CourseName", required = false) String courseName,
             @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable)
@@ -55,6 +56,7 @@ public class TopicsController {
       }
 
     @PostMapping
+    @Transactional
     @CacheEvict(value = "listTopics", allEntries = true)
     public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequestPostDto topicPostDto, UriComponentsBuilder uriComponentsBuilder){
         Topic topic = topicPostDto.convertToTopic(courseRepository);

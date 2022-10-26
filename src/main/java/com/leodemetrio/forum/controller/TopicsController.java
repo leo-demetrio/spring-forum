@@ -57,7 +57,7 @@ public class TopicsController {
 
     @PostMapping
     @Transactional
-    @CacheEvict(value = "listTopics", allEntries = true)
+    @CacheEvict(value = "listTopics, oneTopic", allEntries = true)
     public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequestPostDto topicPostDto, UriComponentsBuilder uriComponentsBuilder){
         Topic topic = topicPostDto.convertToTopic(courseRepository);
         URI uri = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
@@ -65,6 +65,7 @@ public class TopicsController {
     }
 
     @GetMapping("/{id}")
+    @Cacheable(value = "oneTopic")
     public ResponseEntity<TopicDetailsDto> findById(@PathVariable Long id){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
         if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();
@@ -74,7 +75,7 @@ public class TopicsController {
 
     @PutMapping("/{id}")
     @Transactional
-    @CacheEvict(value = "listTopics", allEntries = true)
+    @CacheEvict(value = "listTopics, oneTopic", allEntries = true)
     public  ResponseEntity<TopicDto> update(@PathVariable Long id, @RequestBody TopicRequestPutDto topicDto){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
         if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();

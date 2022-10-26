@@ -11,6 +11,13 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -18,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,19 +44,18 @@ public class TopicsController {
     @GetMapping
     public Page<TopicDto> listAll(
             @RequestParam(value = "CourseName", required = false) String courseName,
-            @RequestParam int page,
-            @RequestParam int qtd)
+            @PageableDefault(sort = "id", direction = Sort.Direction.ASC, page = 0, size = 10) Pageable pageable)
     {
-        Pageable pageable =  PageRequest.of(page,qtd);
         if(courseName == null){
             Page<Topic> topics = topicRepository.findAll(pageable);
             return TopicDto.convert(topics);
         }
         Page<Topic> topics = topicRepository.findByCourseName(courseName, pageable);
         return TopicDto.convert(topics);
-    }
+      }
 
     @PostMapping
+    @CacheEvict(value = "listTopics", allEntries = true)
     public ResponseEntity<TopicDto> create(@RequestBody @Valid TopicRequestPostDto topicPostDto, UriComponentsBuilder uriComponentsBuilder){
         Topic topic = topicPostDto.convertToTopic(courseRepository);
         URI uri = uriComponentsBuilder.path("/topics/{id}").buildAndExpand(topic.getId()).toUri();
@@ -67,6 +72,7 @@ public class TopicsController {
 
     @PutMapping("/{id}")
     @Transactional
+    @CacheEvict(value = "listTopics", allEntries = true)
     public  ResponseEntity<TopicDto> update(@PathVariable Long id, @RequestBody TopicRequestPutDto topicDto){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
         if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();
@@ -76,6 +82,7 @@ public class TopicsController {
     }
 
     @DeleteMapping("/{id}")
+    @CacheEvict(value = "listTopics", allEntries = true)
     public ResponseEntity<Void> delete(@PathVariable Long id){
         Optional<Topic> OptionalTopic = topicRepository.findById(id);
         if(!OptionalTopic.isPresent()) return ResponseEntity.notFound().build();

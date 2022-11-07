@@ -1,10 +1,8 @@
 package com.leodemetrio.forum.config;
 
-import com.leodemetrio.forum.model.Course;
-import com.leodemetrio.forum.model.StatusTopic;
-import com.leodemetrio.forum.model.Topic;
-import com.leodemetrio.forum.model.User;
+import com.leodemetrio.forum.model.*;
 import com.leodemetrio.forum.repository.CourseRepository;
+import com.leodemetrio.forum.repository.ProfileRepository;
 import com.leodemetrio.forum.repository.TopicRepository;
 import com.leodemetrio.forum.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +21,8 @@ public class TestConfig implements CommandLineRunner {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
 
+    private final ProfileRepository profileRepository;
+
 
 //    public TestConfig(TopicRepository topicRepository, UserRepository userRepository, CourseRepository courseRepository) {
 //        this.topicRepository = topicRepository;
@@ -36,6 +36,9 @@ public class TestConfig implements CommandLineRunner {
         var a = new User(null,"Leo","leo@gmail.com",password);
         var a1 = new User(null,"Levi","levi@gmail.com",password);
 
+        var p = new Profile(1L, "ROLE_STUDENT");
+        var p1 = new Profile(2L, "ROLE_MODERATOR");
+
         var c = new Course(null,"Spring","Programing");
         var c1 = new Course(null,"Spring Boot", "Programing");
         var c2 = new Course(null,"Spring Cloud", "DevOps");
@@ -47,6 +50,7 @@ public class TestConfig implements CommandLineRunner {
         var t3 = new Topic(null,"Dúvida", "Devops", LocalDateTime.now(), StatusTopic.NOT_RESPONSE, a, c3);
 
         userRepository.saveAll(Arrays.asList(a,a1));
+        profileRepository.saveAll(Arrays.asList(p,p1));
         courseRepository.saveAll(Arrays.asList(c,c1,c2,c3));
         topicRepository.saveAll(Arrays.asList(t,t1,t2,t3));
     }

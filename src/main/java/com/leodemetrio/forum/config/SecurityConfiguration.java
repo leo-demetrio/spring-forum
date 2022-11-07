@@ -54,10 +54,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/topics/*").permitAll()
                 .antMatchers(HttpMethod.POST, "/auth").permitAll()
                 .antMatchers(HttpMethod.GET, "/actuator/**").permitAll()
+                .antMatchers(HttpMethod.DELETE, "/topics/*").hasRole("MODERATOR")
+                .antMatchers(HttpMethod.GET, "/swagger-ui.html/*").permitAll()
+                .antMatchers( "/h2-console/**").permitAll()
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().headers().frameOptions().sameOrigin()
                 .and().addFilterBefore(new AuthenticationTokenFilter(tokenService,userRepository), UsernamePasswordAuthenticationFilter.class);
+
     }
 
     @Override

@@ -1,0 +1,6 @@
+insert into "user"("email","name","password") values('leo1@gmail.com','leo1','$2a$10$xEE4XSTKThjKSBqrNuWEPOfdaFQpHk6lgCJa6R1Q6dI5.QfhZdN7S')
+insert into "user"("email","name","password") values('leo2@gmail.com','leo2','$2a$10$xEE4XSTKThjKSBqrNuWEPOfdaFQpHk6lgCJa6R1Q6dI5.QfhZdN7S')
+insert into "profile"("name") values('ROLE_STUDENT')
+insert into "profile"("name") values('ROLE_MODERATOR')
+insert into "user_profiles"("user_id","profiles_id") values(1,1)
+insert into "user_profiles"("user_id","profiles_id") values(2,2)

@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     public SecurityConfiguration(
-            AuthenticateService authenticateService,""
+            AuthenticateService authenticateService,
             TokenService tokenService,
             UserRepository userRepository
     ) {
